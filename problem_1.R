@@ -15,7 +15,6 @@ source("data_utils.R")
 download_data_latest("data_latest")
 locations_latest = c("BABIMOST", "RADZIECHOWY", "SZEPIETOWO")
 df2 <- load_csv_files(locations_latest, data_dir="data_latest")
-print(nrow(df2))
 
 # Basic box plot
 p <- ggplot(df2, aes(x=location_name, y=max_t), color=location_name) + 
