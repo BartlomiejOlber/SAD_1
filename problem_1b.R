@@ -31,7 +31,7 @@ load_data <- function(){
 
 zad_1b <- function(){
 	df <- load_data()
-	df <- df[df$location_name == "MARIANOWO II",]
+  df <- df[df$location_name == "BABIMOST",]
 	df22 <- df[df$year == 2022,]
 	df22 <- df22[order(df22$month, df22$day),]
 	df23 <- df[df$year == 2023,]
@@ -47,16 +47,22 @@ zad_1b <- function(){
 }
 
 temp <- zad_1b()
-jpeg(file="zad_1b_hist.jpeg")
-hist(temp, xlim=c(-10, 10), ylim=c(0, 25), breaks=20, col="darkgreen", ann=FALSE)
-title("Histogram różnic temperatury z dobę na dobę w MARIANOWO II")
+jpeg(file="zad_1b_hist_babimost.jpeg")
+temp_hist = hist(temp, xlim=c(-10, 10), ylim=c(0, 50), col="darkgreen", ann=FALSE)
+title("Histogram różnic temperatury z dobę na dobę w BABIMOST")
 dev.off()
 
 mean_temp <- mean(temp)
 sd_temp <- sd(temp)
-x <- seq(-10, 10, by=1)
-jpeg(file="zad_1b_plot.jpeg")
+x <- seq(-10, 10, by=0.1)
+jpeg(file="zad_1b_plot_norm_babimost.jpeg")
 plot(x, dnorm(x, mean=mean_temp, sd=sd_temp), xlim=c(-10, 10), ylim=c(0, 0.2), type="l", ann=FALSE)
+title(paste("Funkcja gęstości rozkładu N (", mean_temp, ",", sd_temp, ")"))
+dev.off()
+
+jpeg(file="zad_1b_plot_babimost.jpeg")
+plot(x, dnorm(x, mean=mean_temp, sd=sd_temp), xlim=c(-10, 10), ylim=c(0, 0.2), type="l", ann=FALSE)
+points(temp_hist$mids, temp_hist$density, col="red", ann=FALSE)
 title(paste("Funkcja gęstości rozkładu N (", mean_temp, ",", sd_temp, ")"))
 dev.off()
 
