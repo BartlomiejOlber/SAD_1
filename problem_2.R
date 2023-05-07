@@ -51,37 +51,45 @@ load_csv_files <- function(data_dir = "data"){
 }
 
 zad_2 <- function(){
-	download_data_since_2001("zadanie_2a")
+  loc_name = "NIEDZICA"
+  #loc_name = "PORONIN"
+	#download_data_since_2001("zadanie_2a")
 	dfa <- load_csv_files("zadanie_2a")
-	dfa <- dfa[dfa$location_name == "PORONIN",]
-	download_data_until_2001("zadanie_2b")
+	dfa <- dfa[dfa$location_name == loc_name,]
+	#download_data_until_2001("zadanie_2b")
 	dfb <- load_csv_files("zadanie_2b")
-	dfb <- dfb[dfb$location_name == "PORONIN",]
+	dfb <- dfb[dfb$location_name == loc_name,]
 	df <- rbind(dfb, dfa)
 	return(df[order(df$year, df$month, df$day),])
 }
 
 df <- zad_2()
-jpeg(file="zad_2_wszystkie_dni.jpeg")
-plot(1:nrow(df), df$avg_t, type="l", ann=FALSE)
-dev.off()
+# jpeg(file="zad_2_wszystkie_dni.jpeg")
+# plot(1:nrow(df), df$min_t, type="l", ann=FALSE)
+# dev.off()
 
-avg_year_temp <- c()
-for(i in 1991:2023){
-	avg_year_temp <- c(avg_year_temp, mean(df[df$year == i,]$avg_t))
+# avg_year_temp <- c()
+# for(i in 1991:2022){
+# 	avg_year_temp <- c(avg_year_temp, mean(df[df$year == i & df$month == 1,]$min_t))
+# }
+# jpeg(file="zad_2_srednia_lata.jpeg")
+# plot(1:length(avg_year_temp), avg_year_temp, type="l", ann=FALSE)
+# dev.off()
+
+avg_month_change_temp <- c()
+#mean_temp = 0
+#mean_count = 0
+for(i in seq(1996, 2020, by = 4)){
+	#for(j in 2:2){
+		#mean_temp <- mean_temp + mean(df[df$year == i & df$month == j,]$max_t)
+    #mean_count <- mean_count + 1
+    mean_1 <- mean(df[df$year == i & df$month %in% c(1, 2),]$avg_t)
+    mean_2 <- mean(df[df$year == i+1 & df$month %in% c(1, 2),]$avg_t)
+    mean_3 <- mean(df[df$year == i+2 & df$month %in% c(1, 2),]$avg_t)
+    mean_4 <- mean(df[df$year == i+3 & df$month %in% c(1, 2),]$avg_t)
+		avg_month_change_temp <- c(avg_month_change_temp, (mean_1+mean_2+mean_3+mean_4)/4)
+	#}
 }
-jpeg(file="zad_2_srednia_lata.jpeg")
-plot(1:length(avg_year_temp), avg_year_temp, type="l", ann=FALSE)
+jpeg(file="zad_2_srednia_miesiace_zmiana.jpeg")
+plot(1:length(avg_month_change_temp), avg_month_change_temp, type="l", ann=FALSE)
 dev.off()
-
-#avg_month_change_temp <- c()
-#for(i in 1992:2022){
-#	for(j in 1:12){
-#		mean_1 <- mean(df[df$year == i && df$month == j,]$avg_t)
-#		mean_2 <- mean(df[df$year == i-1 && df$month == j,]$avg_t)
-#		avg_month_change_temp <- c(avg_month_change_temp, mean_1 - mean_2)
-#	}
-#}
-#jpeg(file="zad_2_srednia_miesiace_zmiana.jpeg")
-#plot(1:length(avg_month_change_temp), avg_month_change_temp, type="l", ann=FALSE)
-#dev.off()

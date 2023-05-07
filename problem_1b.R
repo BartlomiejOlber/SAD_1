@@ -66,3 +66,10 @@ points(temp_hist$mids, temp_hist$density, col="red", ann=FALSE)
 title(paste("Funkcja gęstości rozkładu N (", mean_temp, ",", sd_temp, ")"))
 dev.off()
 
+print(paste("Wartość oczekiwana:", mean_temp))
+print(paste("Prawdopodobieństwo dla (-1; 1):", pnorm(1, mean=mean_temp, sd=sd_temp) - pnorm(-1, mean=mean_temp, sd=sd_temp)))
+print(paste("Prawdopodobieństwo dla (-2; 2):",pnorm(2, mean=mean_temp, sd=sd_temp) - pnorm(-2, mean=mean_temp, sd=sd_temp)))
+print(paste("Prawdopodobieństwo dla (-3; 3):",pnorm(3, mean=mean_temp, sd=sd_temp) - pnorm(-3, mean=mean_temp, sd=sd_temp)))
+print(paste("Prawdopodobieństwo dla (-4; 4):",pnorm(4, mean=mean_temp, sd=sd_temp) - pnorm(-4, mean=mean_temp, sd=sd_temp)))
+
+
