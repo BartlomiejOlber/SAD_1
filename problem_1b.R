@@ -29,7 +29,7 @@ load_data <- function(){
 	return(df)
 }
 
-zad_1b <- function(){
+zad_1b_data <- function(){
 	df <- load_data()
   df <- df[df$location_name == "BABIMOST",]
 	df22 <- df[df$year == 2022,]
@@ -46,7 +46,7 @@ zad_1b <- function(){
 	return(change_temp)
 }
 
-temp <- zad_1b()
+temp <- zad_1b_data()
 jpeg(file="zad_1b_hist_babimost.jpeg")
 temp_hist = hist(temp, xlim=c(-10, 10), ylim=c(0, 50), col="darkgreen", ann=FALSE)
 title("Histogram różnic temperatury z dobę na dobę w BABIMOST")

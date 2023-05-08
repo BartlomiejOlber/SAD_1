@@ -50,46 +50,49 @@ load_csv_files <- function(data_dir = "data"){
   return(df)
 }
 
-zad_2 <- function(){
-  loc_name = "NIEDZICA"
-  #loc_name = "PORONIN"
-	#download_data_since_2001("zadanie_2a")
+zad_2_data <- function(){
+  locations = c("NIEDZICA", "PORONIN")
+	download_data_since_2001("zadanie_2a")
 	dfa <- load_csv_files("zadanie_2a")
-	dfa <- dfa[dfa$location_name == loc_name,]
-	#download_data_until_2001("zadanie_2b")
+	download_data_until_2001("zadanie_2b")
 	dfb <- load_csv_files("zadanie_2b")
-	dfb <- dfb[dfb$location_name == loc_name,]
 	df <- rbind(dfb, dfa)
+  df = df[df$location_name %in% locations,]
 	return(df[order(df$year, df$month, df$day),])
 }
 
-df <- zad_2()
-# jpeg(file="zad_2_wszystkie_dni.jpeg")
-# plot(1:nrow(df), df$min_t, type="l", ann=FALSE)
-# dev.off()
+df_all <- zad_2_data()
+df_niedzica = df_all[df_all$location_name == "NIEDZICA",]
+df_poronin = df_all[df_all$location_name == "PORONIN",]
 
-# avg_year_temp <- c()
-# for(i in 1991:2022){
-# 	avg_year_temp <- c(avg_year_temp, mean(df[df$year == i & df$month == 1,]$min_t))
-# }
-# jpeg(file="zad_2_srednia_lata.jpeg")
-# plot(1:length(avg_year_temp), avg_year_temp, type="l", ann=FALSE)
-# dev.off()
-
-avg_month_change_temp <- c()
-#mean_temp = 0
-#mean_count = 0
-for(i in seq(1996, 2020, by = 4)){
-	#for(j in 2:2){
-		#mean_temp <- mean_temp + mean(df[df$year == i & df$month == j,]$max_t)
-    #mean_count <- mean_count + 1
-    mean_1 <- mean(df[df$year == i & df$month %in% c(1, 2),]$avg_t)
-    mean_2 <- mean(df[df$year == i+1 & df$month %in% c(1, 2),]$avg_t)
-    mean_3 <- mean(df[df$year == i+2 & df$month %in% c(1, 2),]$avg_t)
-    mean_4 <- mean(df[df$year == i+3 & df$month %in% c(1, 2),]$avg_t)
-		avg_month_change_temp <- c(avg_month_change_temp, (mean_1+mean_2+mean_3+mean_4)/4)
-	#}
+x <- seq(1999, 2019, by = 4)
+temp_niedzica <- c()
+temp_poronin <- c()
+for(i in x){
+  temp_niedzica <- c(temp_niedzica, mean(df_niedzica[df_niedzica$year %in% c(i, i+1, i+2, i+3) & df_niedzica$month %in% c(6, 7, 8),]$avg_t))
+  temp_poronin <- c(temp_poronin, mean(df_poronin[df_poronin$year %in% c(i, i+1, i+2, i+3) & df_poronin$month %in% c(6, 7, 8),]$avg_t))
 }
-jpeg(file="zad_2_srednia_miesiace_zmiana.jpeg")
-plot(1:length(avg_month_change_temp), avg_month_change_temp, type="l", ann=FALSE)
+
+jpeg(file="zad_2_lato.jpeg")
+plot(x, temp_poronin, type="b", col="green", ann=FALSE, xaxt="n", ylim=c(min(c(temp_niedzica, temp_poronin), na.rm = TRUE), max(c(temp_niedzica, temp_poronin), na.rm = TRUE)))
+lines(x, temp_niedzica, type="b", col="red")
+axis(1, at=x, las=2, labels=c("1999-2002", "2003-2006", "2007-2010", "2011-2014", "2015-2018", "2019-2022"))
+legend(x="topleft", legend=c("PORONIN", "NIEDZICA"), fill=c("green", "red"))
+title("Średnia temperatura od czerwca do sierpnia")
+dev.off()
+
+x <- seq(2000, 2020, by = 4)
+temp_niedzica <- c()
+temp_poronin <- c()
+for(i in x){
+  temp_niedzica <- c(temp_niedzica, mean(df_niedzica[df_niedzica$year %in% c(i, i+1, i+2, i+3) & df_niedzica$month %in% c(1, 2),]$avg_t))
+  temp_poronin <- c(temp_poronin, mean(df_poronin[df_poronin$year %in% c(i, i+1, i+2, i+3) & df_poronin$month %in% c(1, 2),]$avg_t))
+}
+
+jpeg(file="zad_2_zima.jpeg")
+plot(x, temp_poronin, type="b", col="green", ann=FALSE, xaxt="n", ylim=c(min(c(temp_niedzica, temp_poronin), na.rm = TRUE), max(c(temp_niedzica, temp_poronin), na.rm = TRUE)))
+lines(x, temp_niedzica, type="b", col="red")
+axis(1, at=x, las=2, labels=c("2000-2003", "2004-2007", "2008-2011", "2012-2015", "2016-2019", "2020-2023"))
+legend(x="topleft", legend=c("PORONIN", "NIEDZICA"), fill=c("green", "red"))
+title("Średnia temperatura w styczniu i lutym")
 dev.off()
