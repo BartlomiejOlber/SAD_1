@@ -96,3 +96,35 @@ axis(1, at=x, las=2, labels=c("2000-2003", "2004-2007", "2008-2011", "2012-2015"
 legend(x="topleft", legend=c("PORONIN", "NIEDZICA"), fill=c("green", "red"))
 title("Średnia temperatura w styczniu i lutym")
 dev.off()
+
+x <- seq(1999, 2019, by = 4)
+temp_niedzica <- c()
+temp_poronin <- c()
+for(i in x){
+  temp_niedzica <- c(temp_niedzica, length(df_niedzica[df_niedzica$year %in% c(i, i+1, i+2, i+3) & df_niedzica$month %in% c(6, 7, 8) & df_niedzica$max_t > 25,]$max_t))
+  temp_poronin <- c(temp_poronin, length(df_poronin[df_poronin$year %in% c(i, i+1, i+2, i+3) & df_poronin$month %in% c(6, 7, 8) & df_poronin$max_t > 25,]$max_t))
+}
+
+jpeg(file="zad_2_lato_liczba_dni.jpeg")
+plot(x, temp_poronin, type="b", col="green", ann=FALSE, xaxt="n", ylim=c(min(c(temp_niedzica, temp_poronin), na.rm = TRUE), max(c(temp_niedzica, temp_poronin), na.rm = TRUE)))
+lines(x, temp_niedzica, type="b", col="red")
+axis(1, at=x, las=2, labels=c("1999-2002", "2003-2006", "2007-2010", "2011-2014", "2015-2018", "2019-2022"))
+legend(x="topleft", legend=c("PORONIN", "NIEDZICA"), fill=c("green", "red"))
+title("Liczba dni powyżej 25 stopni od czerwca do sierpnia")
+dev.off()
+
+x <- seq(2000, 2020, by = 4)
+temp_niedzica <- c()
+temp_poronin <- c()
+for(i in x){
+  temp_niedzica <- c(temp_niedzica, length(df_niedzica[df_niedzica$year %in% c(i, i+1, i+2, i+3) & df_niedzica$month %in% c(1, 2) & df_niedzica$max_t > 0,]$max_t))
+  temp_poronin <- c(temp_poronin, length(df_poronin[df_poronin$year %in% c(i, i+1, i+2, i+3) & df_poronin$month %in% c(1, 2) & df_poronin$max_t > 0,]$max_t))
+}
+
+jpeg(file="zad_2_zima_liczba_dni.jpeg")
+plot(x, temp_poronin, type="b", col="green", ann=FALSE, xaxt="n", ylim=c(min(c(temp_niedzica, temp_poronin), na.rm = TRUE), max(c(temp_niedzica, temp_poronin), na.rm = TRUE)))
+lines(x, temp_niedzica, type="b", col="red")
+axis(1, at=x, las=2, labels=c("2000-2003", "2004-2007", "2008-2011", "2012-2015", "2016-2019", "2020-2023"))
+legend(x="topleft", legend=c("PORONIN", "NIEDZICA"), fill=c("green", "red"))
+title("Liczba dni powyżej 0 stopni w styczniu i lutym")
+dev.off()
